@@ -1,7 +1,9 @@
 import DDP from 'DDP.js'
 
+var location = window.location.href.replace(/^https?\:\/\//i, "");
+location = 'ws://' + location + 'websocket'
 var options = {
-    endpoint: 'ws://localhost:3000/websocket',
+    endpoint: location,
     SocketConstructor: WebSocket
 };
 
