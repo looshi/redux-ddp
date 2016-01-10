@@ -4,7 +4,8 @@ Reducers = {};
 let initialInterfaceState = {
   selectedId: '',
   selectedPlayerName: '',
-  statusMessage: ''
+  statusMessage: '',
+  ddpMessages: []
 }
 
 /*
@@ -37,6 +38,12 @@ Reducers.userInterface = function userInterface(state, action) {
         selectedId: action.playerId,
         selectedPlayerName: action.playerName
       });
+    case 'PLAYER_DELETED':
+      // Deselect the current player.
+      return merge(state, {
+        selectedId: '',
+        selectedPlayerName: '',
+      });
     case 'UPDATE_SCORE_OK':
       var message = {
         code: 200,
@@ -49,6 +56,11 @@ Reducers.userInterface = function userInterface(state, action) {
         text : action.playerName + ' save failed!'
       }
       return merge(state, {statusMessage: message});
+    case 'LOG_DDP':
+      // These messages will appear in the Redux debug tool
+      // since they are added to the state.
+      var messages = state.ddpMessages.concat(action.message);
+      return merge(state, {ddpMessages: messages});
     default:
       return state;
   }

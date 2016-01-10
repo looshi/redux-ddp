@@ -155,6 +155,10 @@ body {
   color: gray;
 }
 
+button.delete{
+  margin: 0 0 0 40px;
+  border: 1px solid orange;
+}
 
 .message {
   line-height: 2.25rem;

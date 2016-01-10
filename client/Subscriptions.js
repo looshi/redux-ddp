@@ -18,6 +18,7 @@ DDP.on('added', function (message) {
   if(message.collection !== 'players'){return}
   var player = message.fields;
   player._id = message.id;
+  Store.dispatch(Actions.logDDP(message));
   Store.dispatch(Actions.playerAdded(player));
 });
 
@@ -34,6 +35,7 @@ DDP.on('changed', function (message) {
   if(message.collection !== 'players'){return}
   var player = message.fields;
   player._id = message.id;
+  Store.dispatch(Actions.logDDP(message));
   Store.dispatch(Actions.playerChanged(player));
 });
 
@@ -45,5 +47,6 @@ Removed Message :
 */
 DDP.on('removed', function (message) {
   if(message.collection !== 'players'){return}
+  Store.dispatch(Actions.logDDP(message));
   Store.dispatch(Actions.playerDeleted(message.id));
 });

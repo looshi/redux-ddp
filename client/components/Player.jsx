@@ -31,7 +31,9 @@ class PlayerItem extends React.Component {
       <li className={ this.getClassName() } >
         <span className="name" onClick={ this.handleClick }>{ this.props.player.name } </span>
         <span className="score">{ this.props.player.score }</span>
-        <button onClick={ this.handleDelete }>Delete</button>
+        <span className="score">
+          <button onClick={ this.handleDelete }>Delete</button>
+        </span>
       </li>
     );
   }

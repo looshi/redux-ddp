@@ -4,7 +4,6 @@ class App extends React.Component {
 
   resetPrompt() {
     if (_.isEmpty(this.props.players)) {
-      console.log(this.props);
       return (
         <div className="subtitle">Click Reset Players to generate player data.</div>
       )

@@ -21,5 +21,5 @@ var options = {
 this.DDP = new DDP(options);
 
 this.DDP.on('connected', function () {
-  console.log('DDP connected!');
+  Store.dispatch(Actions.logDDP({message:'connected'}));
 });

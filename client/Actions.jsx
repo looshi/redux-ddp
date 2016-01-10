@@ -83,3 +83,11 @@ Actions.resetPlayers = function resetPlayers() {
     type: 'RESET_PLAYERS'
   };
 };
+
+// Log DDP messages
+Actions.logDDP = function logDDP(message) {
+  return {
+    type: 'LOG_DDP',
+    message: message
+  };
+};
