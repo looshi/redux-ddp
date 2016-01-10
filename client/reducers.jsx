@@ -74,11 +74,15 @@ Reducers.players = function(state = {}, action) {
         [action.player._id]: merge(oldPlayer, action.player)
       }
     case 'UPDATE_SCORE':
-      // This action happens as soon as the button is clicked.
-      // If server update has an error, it will be reverted via 'PLAYER_CHANGED'
-      // which is called when a 'changed' DDP message arrives.
       var oldPlayer = state[action.playerId];
       var newPlayer = {score: oldPlayer.score + 5};
+      return {
+        ...state,
+        [action.playerId]: merge(oldPlayer, newPlayer)
+      }
+    case 'UPDATE_SCORE_FAILED':
+      var oldPlayer = state[action.playerId];
+      var newPlayer = {score: oldPlayer.score - 5};
       return {
         ...state,
         [action.playerId]: merge(oldPlayer, newPlayer)
