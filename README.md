@@ -10,17 +10,12 @@ be updated accordingly.
 ### Managing local state
 Minimongo is not used to store the remote database driven state.  The Store contains a players collection which is a key value store ( very similar to minimongo ), where each key is the document _id.  I find that using key value objects for a collection inside a Store is much easier to deal with than using an Array.  Thanks to @sikanhe for showing me this idea.Thanks to @AdamBrodzinski, this was originally a fork of his great Flux examples.
 
-### Optimistic UI
-The server method `'players.update-score'` intentionally errors 1/3 of the time.  This makes it a bit easier to see what happens when the UI is updated optimistically.
-On an update error, the server will send down an Error object which contains the current data. The client can revert its state based on this information.  This is an overly simplified approach and puts a lot of onus to the server to handle security implications.
 
-I think the more popular and recommended approaches are done only on the client.  The concept is similar to .git rebasing, remove the commit you don't want and replay all the others.  Here is a good explanation and a library for Redux :
-https://github.com/mattkrick/redux-optimistic-ui
-
+### Using DDP messages directly
 
 DDP package used : https://github.com/mondora/ddp.js/
 
-DDP subscription and message :
+The ddp.js makes it pretty easy to work directly with DDP messages.  The app listens to 'added', 'changed', and 'removed' events, and just copies over the properties of the DDP message to the action object.
 ```
 // Subscribe to the players collection.
 DDP.sub('players');
@@ -45,7 +40,12 @@ DDP.on('added', function (message) {
 
 ![Image of App](https://cloud.githubusercontent.com/assets/1656829/12219193/2b2d3b68-b6ed-11e5-9072-9eb3e6144fd1.png)
 
+### Optimistic UI
+The server method `'players.update-score'` intentionally errors 1/3 of the time.  This makes it a bit easier to see what happens when the UI is updated optimistically.
+On an update error, the server will send down an Error object which contains the current data. The client can revert its state based on this information.  This is an overly simplified approach and puts a lot of onus to the server to handle security implications.
 
+I think the more popular and recommended approaches are done only on the client.  The concept is similar to .git rebasing, remove the commit you don't want and replay all the others.  Here is a good explanation and a library for Redux :
+https://github.com/mattkrick/redux-optimistic-ui
 
 
 # Installation Issues
