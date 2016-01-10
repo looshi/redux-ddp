@@ -13,7 +13,11 @@ Meteor.methods({
     Meteor._sleepForMs(1000);
     // Fail one third of the time.
     if(Math.random()<.33){
-      throw new Error('Increment Score Error');
+      // Send the real score down with the error.
+      // Clients can use this information to revert optimistic UI updates.
+      var error = new Meteor.Error(500, 'Score error');
+      error.details = {score: Players.findOne(playerId).score};
+      throw error;
     }
     Players.update({_id: playerId}, {$inc: {score: 5}});
     return Players.findOne(playerId)

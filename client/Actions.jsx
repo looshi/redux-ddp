@@ -20,9 +20,11 @@ Actions.playerAdded = function playersChanged(player) {
 };
 
 Actions.updateScore = function updateScore(playerId, playerName) {
-  Meteor.call('players.update-score', playerId, function(err,res){
+  Meteor.call('players.update-score', playerId, function(err, res){
     if(err){
-      Store.dispatch(Actions.updateScoreFailed(playerId, playerName));
+      // The server error returns the true score.
+      let score = err.details.score;
+      Store.dispatch(Actions.updateScoreFailed(playerId, playerName, score));
     }else{
       Store.dispatch(Actions.updateScoreOk(playerId, playerName));
     }
@@ -33,27 +35,28 @@ Actions.updateScore = function updateScore(playerId, playerName) {
   };
 };
 
-Actions.updateScoreFailed = function updateScoreFailed(playerId, playerName) {
+Actions.updateScoreFailed = function updateScoreFailed(_id, name, score) {
   return {
     type: 'UPDATE_SCORE_FAILED',
-    playerId: playerId,
-    playerName: playerName
+    playerId: _id,
+    playerName: name,
+    score: score
   };
 }
 
-Actions.updateScoreOk = function updateScoreOk(playerId, playerName) {
+Actions.updateScoreOk = function updateScoreOk(_id, name) {
   return {
     type: 'UPDATE_SCORE_OK',
-    playerId: playerId,
-    playerName: playerName
+    playerId: _id,
+    playerName: name
   };
 }
 
-Actions.selectPlayer = function selectPlayer(playerId, playerName) {
+Actions.selectPlayer = function selectPlayer(_id, name) {
   return {
     type: 'SELECT_PLAYER',
-    playerId: playerId,
-    playerName: playerName
+    playerId: _id,
+    playerName: name
   };
 };
 

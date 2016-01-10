@@ -62,8 +62,6 @@ view the players collection structure in the Redux Dev Tools sidebar.
 */
 Reducers.players = function(state = {}, action) {
   switch(action.type) {
-    default:
-      return state;
     case 'PLAYER_ADDED':
       return {...state, [action.player._id]: action.player};
     case 'PLAYER_CHANGED':
@@ -74,6 +72,7 @@ Reducers.players = function(state = {}, action) {
         [action.player._id]: merge(oldPlayer, action.player)
       }
     case 'UPDATE_SCORE':
+      // Optimistically update the score before the server responds.
       var oldPlayer = state[action.playerId];
       var newPlayer = {score: oldPlayer.score + 5};
       return {
@@ -82,10 +81,12 @@ Reducers.players = function(state = {}, action) {
       }
     case 'UPDATE_SCORE_FAILED':
       var oldPlayer = state[action.playerId];
-      var newPlayer = {score: oldPlayer.score - 5};
+      var newPlayer = {score: action.score};
       return {
         ...state,
         [action.playerId]: merge(oldPlayer, newPlayer)
       }
+    default:
+      return state;
   }
 }
