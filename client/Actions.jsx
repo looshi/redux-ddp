@@ -4,70 +4,50 @@
 // with *all* possible ways to mutate the state of the app.
 
 Actions = {};
-Players = new Mongo.Collection('players');
-// used when a mongo players collection changes
-Actions.playersChanged = function playersChanged(newPlayers) {
+// Player data has changed.
+Actions.playerChanged = function playersChanged(player) {
   return {
-    type: 'PLAYERS_CHANGED',
-    players: Players.find().fetch()
+    type: 'PLAYER_CHANGED',
+    player: player
+  };
+};
+
+Actions.playerAdded = function playersChanged(player) {
+  return {
+    type: 'PLAYER_ADDED',
+    player: player
   };
 };
 
 Actions.updateScore = function updateScore(playerId, playerName) {
-  // Create a unique transaction id.
-  // The server will respond with the transactionId on error or success.
-  let transactionId = Random.id();
-  Meteor.call('players.update-score', playerId, transactionId, (err, res) => {
-    if(res){
-      // var action = Actions.updateScoreSuccess(playerId, playerName, transactionId);
-      // store.dispatch(action);
+  Meteor.call('players.update-score', playerId, function(err,res){
+    if(err){
+      Store.dispatch(Actions.updateScoreFailed(playerId, playerName));
     }else{
-      // var action = Actions.updateScoreFailed(playerId, playerName, transactionId);
-      // store.dispatch(action);
+      Store.dispatch(Actions.updateScoreOk(playerId, playerName));
     }
   });
   return {
     type: 'UPDATE_SCORE',
-    playerId: playerId,
-    transactionId: transactionId
+    playerId: playerId
   };
 };
 
-Actions.updateScoreFailed = function updateScoreFailed(playerId, playerName, transactionId) {
+Actions.updateScoreFailed = function updateScoreFailed(playerId, playerName) {
   return {
     type: 'UPDATE_SCORE_FAILED',
     playerId: playerId,
-    playerName: playerName,
-    transactionId: transactionId
+    playerName: playerName
   };
 }
 
-Actions.updateScoreSuccess = function updateScoreSuccess(playerId, playerName, transactionId) {
+Actions.updateScoreOk = function updateScoreOk(playerId, playerName) {
   return {
-    type: 'UPDATE_SCORE_SUCCESS',
+    type: 'UPDATE_SCORE_OK',
     playerId: playerId,
-    playerName: playerName,
-    transactionId: transactionId
+    playerName: playerName
   };
 }
-
-Actions.fetchPlayers = function(playerId = {}) {
-  let sub = Meteor.subscribe('players');
-  let cursor = Players.find({});
-  cursor.observe({
-    added: function(doc){
-      store.dispatch(Actions.playersChanged());
-    },
-    removed: function(){
-      store.dispatch(Actions.playersChanged());
-    },
-    changed: function(){
-      store.dispatch(Actions.playersChanged());
-    }
-  });
-
-  return { type: 'FETCH_PLAYERS' };
-};
 
 Actions.selectPlayer = function selectPlayer(playerId, playerName) {
   return {

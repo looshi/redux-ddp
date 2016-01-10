@@ -144,9 +144,16 @@ body {
 }
 
 .message {
-  color: #aaa;
   line-height: 2.25rem;
   text-align: center;
+}
+
+.message-appear {
+  opacity: 0.01;
+}
+
+.message-appear.message-appear-active{
+  opacity: 1;
 }
 
 .status{
@@ -154,14 +161,14 @@ body {
   margin-left: 10px;
 }
 
-.status.ok{
+.ok{
   color: green;
 }
 
-.status.error {
+.error {
   color: orange;
-  text-align: center;
 }
+
 
 .saveIcon {
   vertical-align: middle;

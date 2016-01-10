@@ -2,11 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 class AppContainer extends React.Component {
-
-  componentWillMount() {
-    store.dispatch(Actions.fetchPlayers());
-  }
-
   componentWillUnmount() {
   }
 
@@ -26,7 +21,7 @@ function mapStateToProps(state) {
     players: state.players,
     selectedId: state.userInterface.selectedId,
     selectedPlayerName: state.userInterface.selectedPlayerName,
-    errorMessage: state.userInterface.errorMessage
+    statusMessage: state.userInterface.statusMessage
   };
 }
 

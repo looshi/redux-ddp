@@ -8,7 +8,7 @@ Meteor.startup(function() {
     document.body.appendChild(root);
 
     ReactDOM.render(
-      <Provider store={store}>
+      <Provider store={Store}>
         <div>
           <AppContainer />
           <DevTools/>

@@ -4,7 +4,7 @@ Reducers = {};
 let initialInterfaceState = {
   selectedId: '',
   selectedPlayerName: '',
-  errorMessage: ''
+  statusMessage: ''
 }
 
 /*
@@ -33,12 +33,22 @@ Reducers.userInterface = function userInterface(state, action) {
 
   switch (action.type) {
     case 'SELECT_PLAYER':
-      // we happen to be replacing all the reducers state but with merge you
-      // could just return the selectedId and it would retain selectedPlayerName
       return merge(state, {
         selectedId: action.playerId,
         selectedPlayerName: action.playerName
       });
+    case 'UPDATE_SCORE_OK':
+      var message = {
+        code: 200,
+        text : action.playerName + ' saved!'
+      }
+      return merge(state, {statusMessage: message});
+    case 'UPDATE_SCORE_FAILED':
+      var message = {
+        code: 500,
+        text : action.playerName + ' save failed!'
+      }
+      return merge(state, {statusMessage: message});
     default:
       return state;
   }
@@ -49,65 +59,29 @@ Reducers.players
 Manages changes to the state.players collection.
 The state.players collection is stored as an object with _id keys, you can
 view the players collection structure in the Redux Dev Tools sidebar.
-
-Optimistic UI
-The 'UPDATE_SCORE' action will optimistically update the local state.
-If the db update fails, state will be updated later via the UPDATE_SCORE_FAILED.
-If the db update succeeds, but the score didn't actually get incremented by 5,
-the state will be updated to display the real db score via PLAYERS_CHANGED.
 */
 Reducers.players = function(state = {}, action) {
   switch(action.type) {
     default:
       return state;
-    case 'UPDATE_SCORE':
-      var oldPlayer = state[action.playerId];
-      var oldTransactions = oldPlayer.transactions || [];
-      var newPlayer = {
-        score: oldPlayer.score + 5,
-        transactions: [...oldTransactions, action.transactionId],
-        saveStatus: 'pending'
-      };
-      return {
-        ...state,
-        [action.playerId]: merge(oldPlayer, newPlayer)
-      }
-    case 'UPDATE_SCORE_FAILED':
-      // The server method failed, revert the increment and remove the pending
-      // transactionId from the player.transactions array.
-      var oldPlayer = state[action.playerId];
-      var newTransactions = _.reject(oldPlayer.transactions, (transactionId) =>{
-        return transactionId === action.transactionId;
-      });
-      var newPlayer = {
-        score: oldPlayer.score - 5,
-        transactions: newTransactions,
-        saveStatus: 'failed'
-      };
-      return {
-        ...state,
-        [action.playerId]: merge(oldPlayer, newPlayer)
-      }
-    case 'UPDATE_SCORE_SUCCESS':
-      // The server method was succesful! Remove the pending transactionId.
-      var oldPlayer = state[action.playerId];
-      var newTransactions = _.reject(oldPlayer.transactions, (transactionId) =>{
-        return transactionId === action.transactionId;
-      });
-      var newPlayer = {
-        transactions: newTransactions,
-        saveStatus: 'ok'
-      };
-      return {
-        ...state,
-        [action.playerId]: merge(oldPlayer, newPlayer)
-      }
-    case 'PLAYERS_CHANGED':
+    case 'PLAYER_ADDED':
+      return {...state, [action.player._id]: action.player};
+    case 'PLAYER_CHANGED':
       // The remote data has changed.
-      const newPlayers = {};
-      action.players.forEach(newPlayer => {
-        newPlayers[newPlayer._id] = newPlayer;
-      });
-      return merge(state, newPlayers);
+      var oldPlayer = state[action.player._id];
+      return {
+        ...state,
+        [action.player._id]: merge(oldPlayer, action.player)
+      }
+    case 'UPDATE_SCORE':
+      // This action happens as soon as the button is clicked.
+      // If server update has an error, it will be reverted via 'PLAYER_CHANGED'
+      // which is called when a 'changed' DDP message arrives.
+      var oldPlayer = state[action.playerId];
+      var newPlayer = {score: oldPlayer.score + 5};
+      return {
+        ...state,
+        [action.playerId]: merge(oldPlayer, newPlayer)
+      }
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class SelectPlayer extends React.Component {
 
@@ -10,7 +11,23 @@ class SelectPlayer extends React.Component {
   handleClick() {
     selectedId = this.props.selectedId;
     selectedPlayerName = this.props.selectedPlayerName;
-    store.dispatch(Actions.updateScore(selectedId, selectedPlayerName));
+    Store.dispatch(Actions.updateScore(selectedId, selectedPlayerName));
+  }
+
+  statusMessage() {
+    let {code} = this.props.statusMessage;
+    let className = code === 200 ? 'message ok' : 'message error';
+    // This animation doesn't work at all, TODO : fix it.
+    return (
+      <ReactCSSTransitionGroup
+        transitionName='message'
+        transitionAppear={true}
+        transitionAppearTimeout={2000}
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}>
+          <div className={className}>{this.props.statusMessage.text}</div>
+      </ReactCSSTransitionGroup>
+    )
   }
 
   render() {
@@ -21,6 +38,7 @@ class SelectPlayer extends React.Component {
           <button className="inc" onClick={this.handleClick}>
             Add 5 points
           </button>
+          { this.statusMessage() }
         </div>
       );
     }

@@ -27,4 +27,4 @@ const finalCreateStore = compose(
 )(createStore);
 
 
-store = finalCreateStore(rootReducer);
+Store = finalCreateStore(rootReducer);
