@@ -21,6 +21,38 @@ Meteor.methods({
     }
     Players.update({_id: playerId}, {$inc: {score: 5}});
     return Players.findOne(playerId)
-  }
+  },
 
-})
+  // Reset the Player collection to its default state.
+  'players.delete': function(playerId){
+    Players.remove({_id: playerId});
+  },
+
+  // Reset the Player collection to its default state.
+  'players.reset': function(){
+    resetPlayers();
+  }
+});
+
+var resetPlayers = function(){
+  Players.remove({});
+  console.log( 'Reseting Players... ');
+  var names = [
+    'Ada Lovelace',
+    'Grace Hopper',
+    'Marie Curie',
+    'Carl Friedrich Gauss',
+    'Nikola Tesla',
+    'Claude Shannon'];
+  names.forEach(function (name) {
+    Players.insert({
+      name: name,
+      score: Math.floor(Random.fraction() * 10) * 5,
+      errorCount: 0
+    });
+  });
+}
+// Run fixtures on server start.
+Meteor.startup(function () {
+  resetPlayers();
+});

@@ -5,12 +5,19 @@ class PlayerItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleClick() {
     var playerId = this.props.player._id;
     var playerName = this.props.player.name;
     Store.dispatch(Actions.selectPlayer(playerId, playerName));
+  }
+
+  handleDelete() {
+    var playerId = this.props.player._id;
+    var playerName = this.props.player.name;
+    Store.dispatch(Actions.deletePlayer(playerId, playerName));
   }
 
   getClassName() {
@@ -21,11 +28,10 @@ class PlayerItem extends React.Component {
 
   render() {
     return (
-      <li
-        className={ this.getClassName() }
-        onClick={ this.handleClick } >
-        <span className="name">{ this.props.player.name } </span>
+      <li className={ this.getClassName() } >
+        <span className="name" onClick={ this.handleClick }>{ this.props.player.name } </span>
         <span className="score">{ this.props.player.score }</span>
+        <button onClick={ this.handleDelete }>Delete</button>
       </li>
     );
   }

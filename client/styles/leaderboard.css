@@ -12,7 +12,7 @@ body {
 }
 
 .outer {
-  margin: 0 auto;
+  margin: 0 18px;
   max-width: 480px;
 }
 
@@ -142,6 +142,19 @@ body {
 .inc:active {
   box-shadow: rgba(0,0,0,.3) 0 1px 3px 0 inset;
 }
+
+.inc.reset {
+  font-size: .8rem;
+  background: gray;
+  color: #fff;
+  float: none;
+  margin: 0 160px 0;
+}
+.inc.reset:hover {
+  background: #fff;
+  color: gray;
+}
+
 
 .message {
   line-height: 2.25rem;

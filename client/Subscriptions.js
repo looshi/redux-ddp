@@ -36,3 +36,14 @@ DDP.on('changed', function (message) {
   player._id = message.id;
   Store.dispatch(Actions.playerChanged(player));
 });
+
+/*
+Removed Message :
+  collection: "players"
+  id: "4oYBYf7q8N2XqjinF"
+  msg: "removed"
+*/
+DDP.on('removed', function (message) {
+  if(message.collection !== 'players'){return}
+  Store.dispatch(Actions.playerDeleted(message.id));
+});

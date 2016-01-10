@@ -64,6 +64,8 @@ Reducers.players = function(state = {}, action) {
   switch(action.type) {
     case 'PLAYER_ADDED':
       return {...state, [action.player._id]: action.player};
+    case 'PLAYER_DELETED':
+      return _.omit(state, action.player._id);
     case 'PLAYER_CHANGED':
       // The remote data has changed.
       var oldPlayer = state[action.player._id];
@@ -80,6 +82,8 @@ Reducers.players = function(state = {}, action) {
         [action.playerId]: merge(oldPlayer, newPlayer)
       }
     case 'UPDATE_SCORE_FAILED':
+      // Overwrite the score to the current db state when the update failed.
+      // For now we're sending back the score on
       var oldPlayer = state[action.playerId];
       var newPlayer = {score: action.score};
       return {

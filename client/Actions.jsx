@@ -60,3 +60,26 @@ Actions.selectPlayer = function selectPlayer(_id, name) {
   };
 };
 
+Actions.deletePlayer = function deletePlayer(_id, name) {
+  Meteor.call('players.delete', _id);
+  return {
+    type: 'DELETE_PLAYER',
+    playerId: _id,
+    playerName: name
+  };
+};
+
+Actions.playerDeleted = function playerDeleted(_id) {
+  return {
+    type: 'PLAYER_DELETED',
+    player: {_id: _id}
+  };
+};
+
+// Regenerates player data randomly.
+Actions.resetPlayers = function resetPlayers() {
+  Meteor.call('players.reset');
+  return {
+    type: 'RESET_PLAYERS'
+  };
+};
