@@ -23,7 +23,7 @@ Meteor.methods({
     return Players.findOne(playerId)
   },
 
-  // Reset the Player collection to its default state.
+  // Delete a single player.
   'players.delete': function(playerId){
     Players.remove({_id: playerId});
   },
@@ -47,8 +47,7 @@ var resetPlayers = function(){
   names.forEach(function (name) {
     Players.insert({
       name: name,
-      score: Math.floor(Random.fraction() * 10) * 5,
-      errorCount: 0
+      score: Math.floor(Random.fraction() * 10) * 5
     });
   });
 }

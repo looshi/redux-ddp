@@ -19,8 +19,7 @@ class AppContainer extends React.Component {
 function mapStateToProps(state) {
   return {
     players: state.players,
-    selectedId: state.userInterface.selectedId,
-    selectedPlayerName: state.userInterface.selectedPlayerName,
+    selectedPlayer: state.userInterface.selectedPlayer,
     statusMessage: state.userInterface.statusMessage,
     ddpMessages: state.userInterface.ddpMessages
   };

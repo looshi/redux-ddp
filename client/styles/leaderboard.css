@@ -84,6 +84,7 @@ body {
   font-size: 1.25em;
   font-weight: 300;
   vertical-align: middle;
+  min-width: 292px;
 }
 
 .player .score {
@@ -94,6 +95,7 @@ body {
   font-weight: 600;
   line-height: 2.4em;
   padding-right: 1.25em;
+  min-width: 50px;
 }
 
 .player.selected {
@@ -101,8 +103,9 @@ body {
   border-left: #eb5f3a 4px solid;
 }
 
-.player:hover {
+.player:hover:not(.selected) {
   background-color: #fefff4;
+  border-left: #ccc 4px solid;
 }
 
 .details {
@@ -155,9 +158,13 @@ body {
   color: gray;
 }
 
-button.delete{
-  margin: 0 0 0 40px;
+button{
+  border: 1px solid gray;
+}
+
+button:hover{
   border: 1px solid orange;
+  cursor: pointer;
 }
 
 .message {

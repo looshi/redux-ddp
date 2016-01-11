@@ -6,67 +6,41 @@
 Actions = {};
 // Player data has changed.
 Actions.playerChanged = function playersChanged(player) {
-  return {
-    type: 'PLAYER_CHANGED',
-    player: player
-  };
+  return {type: 'PLAYER_CHANGED', player};
 };
 
 Actions.playerAdded = function playersChanged(player) {
-  return {
-    type: 'PLAYER_ADDED',
-    player: player
-  };
+  return {type: 'PLAYER_ADDED', player};
 };
 
-Actions.updateScore = function updateScore(playerId, playerName) {
-  Meteor.call('players.update-score', playerId, function(err, res){
+Actions.updateScore = function updateScore(player) {
+  Meteor.call('players.update-score', player._id, function(err, res){
     if(err){
       // The server error returns the true score.
       let score = err.details.score;
-      Store.dispatch(Actions.updateScoreFailed(playerId, playerName, score));
+      Store.dispatch(Actions.updateScoreFailed(player, score));
     }else{
-      Store.dispatch(Actions.updateScoreOk(playerId, playerName));
+      Store.dispatch(Actions.updateScoreOk(player));
     }
   });
-  return {
-    type: 'UPDATE_SCORE',
-    playerId: playerId
-  };
+  return {type: 'UPDATE_SCORE', player};
 };
 
-Actions.updateScoreFailed = function updateScoreFailed(_id, name, score) {
-  return {
-    type: 'UPDATE_SCORE_FAILED',
-    playerId: _id,
-    playerName: name,
-    score: score
-  };
+Actions.updateScoreFailed = function updateScoreFailed(player, score) {
+  return {type: 'UPDATE_SCORE_FAILED', player, score};
 }
 
-Actions.updateScoreOk = function updateScoreOk(_id, name) {
-  return {
-    type: 'UPDATE_SCORE_OK',
-    playerId: _id,
-    playerName: name
-  };
+Actions.updateScoreOk = function updateScoreOk(player) {
+  return {type: 'UPDATE_SCORE_OK', player};
 }
 
-Actions.selectPlayer = function selectPlayer(_id, name) {
-  return {
-    type: 'SELECT_PLAYER',
-    playerId: _id,
-    playerName: name
-  };
+Actions.selectPlayer = function selectPlayer(player) {
+  return {type: 'SELECT_PLAYER', player};
 };
 
-Actions.deletePlayer = function deletePlayer(_id, name) {
-  Meteor.call('players.delete', _id);
-  return {
-    type: 'DELETE_PLAYER',
-    playerId: _id,
-    playerName: name
-  };
+Actions.deletePlayer = function deletePlayer(player) {
+  Meteor.call('players.delete', player._id);
+  return {type: 'DELETE_PLAYER', player};
 };
 
 Actions.playerDeleted = function playerDeleted(_id) {
@@ -79,9 +53,7 @@ Actions.playerDeleted = function playerDeleted(_id) {
 // Regenerates player data randomly.
 Actions.resetPlayers = function resetPlayers() {
   Meteor.call('players.reset');
-  return {
-    type: 'RESET_PLAYERS'
-  };
+  return { type: 'RESET_PLAYERS' };
 };
 
 // Log DDP messages

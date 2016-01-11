@@ -21,7 +21,7 @@ class App extends React.Component {
         <div>
           <PlayerList
             players = {this.props.players}
-            selectedId = {this.props.selectedId} />
+            selectedId = {this.props.selectedPlayer._id} />
         </div>
         <SelectPlayer { ...this.props } />
       </div>
@@ -31,7 +31,7 @@ class App extends React.Component {
 
 App.propTypes = {
   players: React.PropTypes.object,
-  selectedId: React.PropTypes.string,
+  selectedPlayer: React.PropTypes.object,
   selectedName: React.PropTypes.string,
   errorMessage: React.PropTypes.string
 }

@@ -9,9 +9,7 @@ class SelectPlayer extends React.Component {
   }
 
   handleClick() {
-    selectedId = this.props.selectedId;
-    selectedPlayerName = this.props.selectedPlayerName;
-    Store.dispatch(Actions.updateScore(selectedId, selectedPlayerName));
+    Store.dispatch(Actions.updateScore(this.props.selectedPlayer));
   }
 
   statusMessage() {
@@ -31,10 +29,10 @@ class SelectPlayer extends React.Component {
   }
 
   render() {
-    if (this.props.selectedPlayerName) {
+    if (this.props.selectedPlayer._id) {
       return (
         <div className="details">
-          <div className="name">{this.props.selectedPlayerName}</div>
+          <div className="name">{this.props.selectedPlayer.name}</div>
           <button className="inc" onClick={this.handleClick}>
             Add 5 points
           </button>
@@ -51,8 +49,7 @@ class SelectPlayer extends React.Component {
 };
 
 SelectPlayer.propTypes = {
-  selectedName: React.PropTypes.string,
-  selectedId: React.PropTypes.string
+  selectedPlayer: React.PropTypes.object.isRequired
 }
 
 this.SelectPlayer = SelectPlayer
