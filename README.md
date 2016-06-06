@@ -2,8 +2,6 @@
 
 Example Leaderboard application demonstrating use of DDP messages to populate a Redux store.
 
-Demo App here : http://reduxddp.meteor.com/
-
 When DDP messages arrive, a Redux action is called and the Redux Store will
 be updated accordingly.
 
